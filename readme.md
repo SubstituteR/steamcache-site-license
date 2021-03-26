@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This is a docker container for running a Steam Site License Server with content caching. The intention is for this to be used by LAN parties and other places where bandwidth is limited, but you want a content cache for Steam.
+This is a docker container for running a Steam Site License Server with content caching. The intention is for this to be used by LAN parties and other places where bandwidth is limited, but you want a content cache for Steam. This is a fork of the original server from [LanCache.net](https://lancache.net).
 
 This is a better solution than previous proxy-based Steam caches for a few reasons:
 
@@ -21,9 +21,8 @@ Adding a user to a Steam Partner forces Steam Guard to be enabled, this is a pro
 
 ## Usage
 
-You will need to consider network, Steam credentials and a storage volume when setting up the container.
-
-```
+### Docker CLI:
+```bash
 docker run \
     --restart=unless-stopped \
     --name steamcache-server \
@@ -32,11 +31,29 @@ docker run \
     -v /data/cache:/opt/steamcmd/cache \
     -e STEAM_USERNAME=mysteamuser \
     -e STEAM_PASSWORD=hunter2 \
-    -e STEAM_AUTHCODE_URL=https://myauthcodeservice.example.com \
+    -e STEAM_AUTHCODE_URL=http://myauthcodeservice.example.com \
     lancachenet/steamcache-site-license:latest
 ```
 
-In this example, the path `/data/cache` on the host will be mapped to the cache directory in the container. The Steam credentials for the site are used as environment variables.
+### Docker Compose:
+```yaml
+version: '3.3'
+services:
+    steamcache-site-license:
+        restart: unless-stopped
+        container_name: steamcache-server
+        network_mode: host
+        volumes:
+            - '/data/cache:/opt/steamcmd/cache'
+        environment:
+            - STEAM_USERNAME=mysteamuser
+            - STEAM_PASSWORD=hunter2
+            - 'STEAM_AUTHCODE_URL=http://myauthcodeservice.example.com'
+        image: 'lancachenet/steamcache-site-license:latest'
+```
+
+
+In these examples, the path `/data/cache` on the host will be mapped to the cache directory in the container. The Steam credentials for the site are used as environment variables.
 
 The network settings need to be host networking on the container. This is because steam clients discover the Site License Server by listening to UDP broadcasts sent out by the license server. If networking is not host mode then the broadcasts will not be seen by your LAN.
 
@@ -53,7 +70,7 @@ The following variables are supported to allow configuration:
 
 ## User/Group Identifiers
 
-To prevent any problems reading/writing data to the volume and to follow Valve best practice, it is best to have a single user for Steam. You can specify the user ID and group ID for this user as environment variables.
+To prevent any problems reading/writing data to the volume and to follow Valve's best practice, it is best to have a single user for Steam. You can specify the user ID and group ID for this user as environment variables.
 
 ## Suggested Hardware
 
@@ -63,30 +80,12 @@ Regular commodity hardware (a single 2TB WD Black on an HP Microserver) can achi
 
 Tail the container logs to see the output from the cache server.
 
+### Docker CLI
 ```
 docker logs -f steamcache-server
 ```
 
-## License
-
-The MIT License (MIT)
-
-Copyright (c) 2017 Jessica Smith
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+### Docker Compose
+```
+docker-compose logs steamcache-site-license
+```
