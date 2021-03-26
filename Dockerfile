@@ -7,6 +7,7 @@ RUN \
     apt-get update && \
     apt-get install -y wget && \
     rm -rf /var/lib/apt/lists/*
+
 EXPOSE \
 	3128/tcp \
 	27037/tcp \
@@ -16,6 +17,7 @@ EXPOSE \
 
 ENV \
 	STEAM_CACHE_SIZE_GB=1000 \
+	STEAM_CACHE_CREDS=0 \
 	STEAM_USERNAME= \
 	STEAM_PASSWORD= \
 	STEAM_GUARD= \

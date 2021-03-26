@@ -64,6 +64,7 @@ The following variables are supported to allow configuration:
  - **STEAM_USERNAME** - The username to log in to the site with
  - **STEAM_PASSWORD** - The password for the Steam user
  - **STEAM_AUTHCODE_URL** - The URL for an instance of the [Steam 2FA Auth Code Service](https://github.com/mintopia/steamcache-authcode) for the user
+ - **STEAM_CACHE_CREDS** - Allows the caching of credentials by computers on the network
  - **STEAM_CACHE_SIZE_GB** - The size of the cache in GB
  - **PGID** - The group ID for the user - see below for details
  - **PUID** - The user ID for the user - see below for details
