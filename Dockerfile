@@ -1,9 +1,9 @@
-FROM sigboe/steamcmd:latest
-MAINTAINER Jessica Smith <jess@mintopia.net>
+FROM steamcmd/steamcmd:latest
+MAINTAINER Substitute <substitute@pocketdevs.org>
 
 USER root
 RUN \
-	/opt/steamcmd/steamcmd.sh +quit && \
+	steamcmd +quit && \
     apt-get update && \
     apt-get install -y wget && \
     rm -rf /var/lib/apt/lists/*
@@ -18,6 +18,8 @@ EXPOSE \
 ENV \
 	STEAM_CACHE_SIZE_GB=1000 \
 	STEAM_CACHE_CREDS=0 \
+	STEAM_CACHE_IP= \
+	STEAM_CACHE_EXTERNAL= \
 	STEAM_USERNAME= \
 	STEAM_PASSWORD= \
 	STEAM_GUARD= \
